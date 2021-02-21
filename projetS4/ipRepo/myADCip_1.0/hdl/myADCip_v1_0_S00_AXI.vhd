@@ -17,7 +17,8 @@ entity myADCip_v1_0_S00_AXI is
 	port (
 		-- Users to add ports here
 		i_data_echantillon : in std_logic_vector(11 downto 0);
-		o_data_out : out std_logic_vector(31 downto 0);
+        o_data_out         : out std_logic_vector(31 downto 0);
+
 
 		-- User ports ends
 		-- Do not modify the ports beyond this line
@@ -355,8 +356,9 @@ begin
 	    loc_addr := axi_araddr(ADDR_LSB + OPT_MEM_ADDR_BITS downto ADDR_LSB);
 	    case loc_addr is
 	      when b"00" =>
-	        reg_data_out(11 downto 0) <= i_data_echantillon;
-	        reg_data_out(31 downto 12) <= (others => '0');
+	        reg_data_out(11 downto 0) <= i_data_echantillon;       
+            reg_data_out(31 downto 12) <= (others => '0');
+
 	      when b"01" =>
 	        reg_data_out <= slv_reg1;
 	      when b"10" =>
@@ -389,6 +391,7 @@ begin
 
 	-- Add user logic here
 	o_data_out <= slv_reg1;
+
 
 	-- User logic ends
 

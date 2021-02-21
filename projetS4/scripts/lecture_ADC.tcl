@@ -47,7 +47,6 @@
 proc checkRequiredFiles { origin_dir} {
   set status true
   set files [list \
-   #"I:/Udes/S4/Projet/lecture_ADC/lecture_ADC.srcs/sources_1/bd/design_1/design_1.bd" \#
    "$origin_dir/../vhdSources/AD7476_mef.vhd" \
    "$origin_dir/../vhdSources/Ctrl_AD1.vhd" \
    "$origin_dir/../vhdSources/Synchro_Horloges.vhd" \
@@ -59,7 +58,7 @@ proc checkRequiredFiles { origin_dir} {
    "$origin_dir/../vhdSources/registre_16b.vhd" \
    "$origin_dir/../vhdSources/ctrl_DAC_tb.vhd" \
    "$origin_dir/../vhdSources/Ctrl_AD1_tb.vhd" \
-   "$origin_dir/../vhdSources/Atelier3_Constraintes.xdc" \
+   "$origin_dir/../constraints/Atelier3_Constraintes.xdc" \
   ]
   foreach ifile $files {
     if { ![file isfile $ifile] } {
@@ -150,7 +149,7 @@ if { $::argc > 0 } {
 }
 
 # Set the directory path for the original project from where this script was exported
-set orig_proj_dir "[file normalize "$origin_dir/../work/LectureADC"]"
+set orig_proj_dir "[file normalize "$origin_dir/../work/lecture_ADC"]"
 
 # Check for paths and files needed for project creation
 set validate_required 0
@@ -210,7 +209,6 @@ if { $obj != {} } {
 set obj [get_filesets sources_1]
 # Import local files from the original project
 set files [list \
- #file normalize "${origin_dir}/lecture_ADC.srcs/sources_1/bd/design_1/design_1.bd" ]\#
  [file normalize "${origin_dir}/../vhdSources/AD7476_mef.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/Ctrl_AD1.vhd"]\
  [file normalize "${origin_dir}/../vhdSources/Synchro_Horloges.vhd"]\

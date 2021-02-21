@@ -197,6 +197,10 @@ proc create_root_design { parentCell } {
 
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
 
+  set Pmod_8LD [ create_bd_intf_port -mode Master -vlnv digilentinc.com:interface:pmod_rtl:1.0 Pmod_8LD ]
+
+  set Pmod_OLED [ create_bd_intf_port -mode Master -vlnv digilentinc.com:interface:pmod_rtl:1.0 Pmod_OLED ]
+
   set i_sw [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 i_sw ]
 
   set o_leds [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 o_leds ]
@@ -215,6 +219,8 @@ proc create_root_design { parentCell } {
   # Create instance: axi_gpio_0, and set properties
   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
   set_property -dict [ list \
+   CONFIG.C_ALL_INPUTS {1} \
+   CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.GPIO_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_0
@@ -224,6 +230,7 @@ proc create_root_design { parentCell } {
   set_property -dict [ list \
    CONFIG.C_ALL_INPUTS {0} \
    CONFIG.C_ALL_OUTPUTS {1} \
+   CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.GPIO_BOARD_INTERFACE {Custom} \
    CONFIG.USE_BOARD_FLOW {true} \
  ] $axi_gpio_1
@@ -716,6 +723,8 @@ proc create_root_design { parentCell } {
   set rst_ps7_0_50M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_0_50M ]
 
   # Create interface connections
+  connect_bd_intf_net -intf_net PmodGPIO_0_Pmod_out [get_bd_intf_ports Pmod_8LD] [get_bd_intf_pins PmodGPIO_0/Pmod_out]
+  connect_bd_intf_net -intf_net PmodOLED_0_Pmod_out [get_bd_intf_ports Pmod_OLED] [get_bd_intf_pins PmodOLED_0/Pmod_out]
   connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports i_sw] [get_bd_intf_pins axi_gpio_0/GPIO]
   connect_bd_intf_net -intf_net axi_gpio_1_GPIO [get_bd_intf_ports o_leds] [get_bd_intf_pins axi_gpio_1/GPIO]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
@@ -756,9 +765,6 @@ proc create_root_design { parentCell } {
 ##################################################################
 # MAIN FLOW
 ##################################################################
-
-
-common::send_gid_msg -ssname BD::TCL -id 2052 -severity "CRITICAL WARNING" "This Tcl script was generated from a block design that is out-of-date/locked. It is possible that design <$design_name> may result in errors during construction."
 
 create_root_design ""
 
